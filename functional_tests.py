@@ -36,12 +36,17 @@ class NewVisitorTest(unittest.TestCase):
 		#  "1: Buy anduk" as an item in a to do list
 		inputbox.send_keys(Keys.ENTER)
 
+		# He types "Buy bola" into a text box
+		inputbox.send_keys('Buy bola')
+
+		# When he hits enter, the page updates, and now the page lists
+		#  "1: Buy anduk" as an item in a to do list
+		inputbox.send_keys(Keys.ENTER)
+
 		table = self.browser.find_element_by_id('id_list_table')
 		rows = table.find_elements_by_tag_name('tr')
-		self.assertTrue(
-			any(row.text == '1: Buy anduk' for row in rows),
-			"New to-do item did not appear in table"
-		)
+		self.assertIn('1: Buy anduk', [row.text for row in rows])
+		self.assertIn('2: Buy bola', [row.text for row in rows])
 
 		# There is stil a text box inviting her to add another item. She
 		# enter "Sell anduk"
