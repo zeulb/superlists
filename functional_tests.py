@@ -11,6 +11,11 @@ class NewVisitorTest(unittest.TestCase):
 	def tearDown(self):
 		self.browser.quit()
 
+	def check_for_row_in_list_table(self, row_text):
+		table = self.browser.find_element_by_id('id_list_table')
+		rows = table.find_elements_by_tag_name('tr')
+		self.assertIn(row_text, [row.text for row in rows])
+
 	def test_can_start_a_list_and_retrieve_it_later(self):		
 
 		# Budi has created a cool to-do app
@@ -36,6 +41,8 @@ class NewVisitorTest(unittest.TestCase):
 		#  "1: Buy anduk" as an item in a to do list
 		inputbox.send_keys(Keys.ENTER)
 
+		inputbox = self.browser.find_element_by_id('id_new_item')
+
 		# He types "Buy bola" into a text box
 		inputbox.send_keys('Buy bola')
 
@@ -43,11 +50,8 @@ class NewVisitorTest(unittest.TestCase):
 		#  "1: Buy anduk" as an item in a to do list
 		inputbox.send_keys(Keys.ENTER)
 
-		table = self.browser.find_element_by_id('id_list_table')
-		rows = table.find_elements_by_tag_name('tr')
-		self.assertIn('1: Buy anduk', [row.text for row in rows])
-		self.assertIn('2: Buy bola', [row.text for row in rows])
-
+		self.check_for_row_in_list_table('1: Buy anduk')
+		self.check_for_row_in_list_table('2: Buy bola')
 		# There is stil a text box inviting her to add another item. She
 		# enter "Sell anduk"
 		self.fail('Finish the test!')
