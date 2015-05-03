@@ -18,46 +18,47 @@ class NewVisitorTest(LiveServerTestCase):
 
 	def test_can_start_a_list_and_retrieve_it_later(self):
 
-		# Budi has created a cool to-do app
-		# Budi invite anduk to visit it.
 		self.browser.get(self.live_server_url)
 
-		# Anduk notices the page title and header mention to-do lists
 		self.assertIn('To-Do', self.browser.title)
 		header_text = self.browser.find_element_by_tag_name('h1').text
 		self.assertIn('To-Do', header_text)
 
-		# He is invited to enter a to-do item straight away
 		inputbox = self.browser.find_element_by_id('id_new_item')
 		self.assertEqual(
 			inputbox.get_attribute('placeholder'),
 			'Enter a to-do item'
 		)
 
-		# He types "Buy anduk" into a text box
+
 		inputbox.send_keys('Buy anduk')
-
-		# When he hits enter, the page updates, and now the page lists
-		#  "1: Buy anduk" as an item in a to do list
 		inputbox.send_keys(Keys.ENTER)
 
-		inputbox = self.browser.find_element_by_id('id_new_item')
 
-		# He types "Buy bola" into a text box
-		inputbox.send_keys('Buy bola')
-
-		# When he hits enter, the page updates, and now the page lists
-		#  "1: Buy anduk" as an item in a to do list
-		inputbox.send_keys(Keys.ENTER)
+		edith_list_url = self.browser.current_url
+		self.assertRegex(edith_list_url, '/lists/.+')
 
 		self.check_for_row_in_list_table('1: Buy anduk')
-		self.check_for_row_in_list_table('2: Buy bola')
-		# There is stil a text box inviting her to add another item. She
-		# enter "Sell anduk"
+
+		self.browser.quit()
+		self.browser = webdriver.Chrome('/Users/zeulb/Dropbox/Programming/TDDPython/chromedriver')
+
+		self.browser.get(self.live_server_url)
+		page_text = self.browser.find_element_by_tag_name('body').text
+		self.assertNotIn('Buy anduk', page_text)
+		self.assertNotIn('make a fly', page_text)
+
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox.send_keys('Buy bola')
+		inputbox.send_keys(Keys.ENTER)
+
+		francis_list_url = self.browser.current_url
+		self.assertRegex(francis_list_url, '/lists/.+')
+		self.assertNotEqual(francis_list_url, edith_list_url)
+
+		page_text = self.browser.find_element_by_tag_name('body').text
+		self.assertNotIn('Buy anduk', page_text)
+		self.assertIn('Buy bola', page_text)
+
 		self.fail('Finish the test!')
-
-		# The page updates again, now shows both items in her to do list
-
-		# Anduk refreshes that url - his to do list is still there.
-
-		# Satisfied, she goes back to sleep
+		
