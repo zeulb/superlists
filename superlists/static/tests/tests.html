@@ -9,12 +9,7 @@
 <body>
 	<div id="qunit"></div>
 	<div id="qunit-fixture">
-		
-		<form>
-			<input name="text" />
-			<div class="has-error">Error Text</div>
-		</form>
-
+		<a id="id_login">Sign In</a>
 	</div>
 
 	<script src="http://code.jquery.com/jquery.min.js"></script>
@@ -23,14 +18,22 @@
 	<script>
 /*global $, test, equal */
 
-test("errors should be hidden on keypress", function() {
-	$('input').trigger('keypress');
-	equal($('.has-error').is(':visible'), false);
-});
+test("initialize binds sign in button to navigator.id.request", function() {
+	var requestWasCalled = false;
+	var mockRequestFunction = function () { requestWasCalled = true; };
+	var mockNavigator = {
+		id: {
+			request: mockRequestFunction
+		}
+	}
 
-test("errors should not be hidden unless there is a keypress", function() {
-	equal($('.has-error').is(':visible'), true);
-});
+	Superlists.Accounts.initialize(mockNavigator);
+
+	$('#id_login').trigger('click');
+
+	equal(requestWasCalled, true);
+
+})
 
 	</script>
 </body>
