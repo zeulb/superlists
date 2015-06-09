@@ -24,7 +24,9 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+DOMAIN = 'localhost'
+
+ALLOWED_HOSTS = [DOMAIN]
 
 
 # Application definition
@@ -94,7 +96,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LOGGING = {
-    'version' : 1,
+    'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
@@ -104,6 +106,12 @@ LOGGING = {
     },
     'loggers': {
         'django': {
+            'handlers': ['console'],
+        },
+        'accounts': {
+            'handlers': ['console'],
+        },
+        'lists': {
             'handlers': ['console'],
         },
     },
