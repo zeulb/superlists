@@ -7,7 +7,8 @@ def create_session_on_server(host, email):
 		[
 			'fab',
 			'create_session_on_server:email={}'.format(email),
-			'--host=ubuntu@{} -i ~/Dropbox/key-torrify.pem'.format(host),
+			'-i', '~/Dropbox/key-torrify.pem',
+			'--host={}'.format(host),
 			'--hide=everything,status'
 		],
 		cwd=THIS_FOLDER
@@ -15,5 +16,6 @@ def create_session_on_server(host, email):
 
 def reset_database(host):
 	subprocess.check_call(
-		['fab', 'reset_database', '--host=ubuntu@{} -i ~/Dropbox/key-torrify.pem'.format(host)]
+		['fab', 'reset_database', '-i', '~/Dropbox/key-torrify.pem', '--host={}'.format(host)],
+		cwd=THIS_FOLDER
 	)
