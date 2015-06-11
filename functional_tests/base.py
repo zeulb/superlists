@@ -6,6 +6,7 @@ import sys
 from .server_tools import reset_database
 import os
 from datetime import datetime
+import time
 
 DEFAULT_WAIT = 5
 SCREEN_DUMP_LOCATION = os.path.join(
@@ -58,7 +59,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 	def take_screenshot(self):
 		filename= self._get_filename() + '.png'
 		print('screenshooting to', filename)
-		self.browser.get_screenshoot_as_file(filename)
+		self.browser.get_screenshot_as_file(filename)
 
 	def dump_html(self):
 		filename= self._get_filename() + '.html'
